@@ -1,0 +1,6 @@
+<h3>标签云</h3>
+      <ul>
+        {% for lable in labelslist %}
+        <li><a href="{% url 'tagarticle' %}?tag={{ lable.name }}">{{ lable.name }}</a></li>
+        {% endfor %}
+      </ul>

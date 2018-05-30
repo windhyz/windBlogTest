@@ -1,0 +1,43 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link href="{% static 'css/reglogin.css' %}" rel='stylesheet' type='text/css' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div class="main">
+		<div class="header" >
+			<h1>Create a Free Account!</h1>
+		</div>
+		<p></p>
+			<form action="{% url 'register' %}" method="post">
+                {% csrf_token %}
+				<ul class="left-form">
+					<h2>New Account:</h2>
+					<li>
+						{{ registerForm.username }}
+						<div class="clear"> </div>
+					</li>
+					<li>
+						{{ registerForm.email }}
+						<div class="clear"> </div>
+					</li>
+					<li>
+						{{ registerForm.url }}
+						<div class="clear"> </div>
+					</li>
+					<li>
+                        {{ registerForm.password }}
+						<div class="clear"> </div>
+					</li>
+                    <input type="hidden" name="source_url" value="{{ request.META.HTTP_REFERER }}">
+					<input type="submit" value="Create And Login">
+					<div class="clear"> </div>
+				</ul>
+				<div class="clear"> </div>
+			</form>
+	</div>
+</body>
+</html>

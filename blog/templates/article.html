@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load myfilter %}
+{% block articleslist %}
+    <div class="postdate">
+        <div class="month">{{ article.date_publish | month_to_upper }}</div>
+        <div class="date">{{ article.date_publish | date:'d' }}</div>
+    </div>
+    <div class="title">
+        <h2><a href="" rel="bookmark" title="{{ article.title }}">{{ article.title }}</a></h2>
+        <div class="postmeta">
+            <span class="postmeta_author">{{ article.user.username }}</span>
+            <span class="postmeta_category"><a href="" rel="category">{{ article.category.name }}</a></span>
+            <span class="postmeta_time">{{ article.date_publish | date:'Y-m-d' }}</span>
+        </div>
+    </div>
+    <div class="entry">
+          {{ article.content | safe }}
+    </div>
+
+    <div id="commentform">
+        <div>
+            <div class="commentform_left">
+                <img alt="" src="{% static 'images/default.png' %}" class="avatar-default avatar-45 photo" height="54" width="54">
+            </div>
+            {% if not request.user.is_authenticated %}
+            <div class="commentform_right">发表我的评论</div>
+            {% else %}
+            <div class="commentform_right">{{ request.user.username }}&nbsp;&nbsp;<span>发表我的评论</span></div>
+            {% endif %}
+        </div>
+        <form action="{% url 'comment_post' %}" method="post">
+            {% csrf_token %}
+            <p>{{ comment_form.comment }}</p>
+            <p>{{ comment_form.article }}
+                <input align="right" name="submit" type="submit" id="submit" tabindex="5" value="提交评论" class="button" onmouseover="this.style.backgroundPosition='left -40px'" onmouseout="this.style.backgroundPosition='left top'"/>
+            </p>
+            <p>{{ comment_form.author }}
+                <label for="author">Name (required)</label>
+            </p>
+            <p>{{ comment_form.email }}
+                <label for="email">Email (Will NOT be published) (required)</label>
+            </p>
+            <p>{{ comment_form.url }}
+                <label for="url">URL</label>
+            </p>
+        </form>
+    </div>
+
+    <div class="commentstitle">
+        <h3 id="comments">
+            <span class="commentsnumber">(1)个小伙伴在吐槽</span>
+        </h3>
+    </div>
+    <ol class="commentlist">
+    {% for comment in comment_list %}
+        <li id="comment-59418">
+            <div class="top">
+                <a href='{{ comment.url }}' rel='external nofollow' class='url'>{{ comment.username }}</a><span class="time"> @ <a href="#comment-59418" title="">{{ comment.date_publish | date:'Y-m-d H:i:s' }}</a></span>
+            </div>
+            <div>
+                <img alt='' src='{% static 'images/default.png' %}' class='avatar avatar-32 photo' height='32' width='32' />
+            </div>
+
+            <div class="body">
+                <p>{{ comment.content }}</p>
+            </div>
+        </li>
+        {% for children_comment in comment.children_comment %}
+         <li id="comment-59542">
+             <div class="reply">
+                 <div class="top">
+                     <a href="{{ children_comment.url }}" rel="external nofollow" class="url">{{ children_comment.username }}</a>
+                     <span class="time"> @ <a href="#comment-59543" title="">{{ children_comment.date_publish | date:'Y-m-d H:i:s' }}</a></span>
+                 </div>
+                 <div>
+                     <img alt="" src="{% static 'images/default.png' %}" class="avatar avatar-32 photo" height="32" width="32">
+                 </div>
+                 <div class="body">
+                     {{ children_comment.content }}
+                 </div>
+             </div>
+         </li>
+        {% endfor %}
+    {% endfor %}
+    </ol>
+{% endblock %}
+{% block atentionme %}
+{% include 'me.html' %}
+{% endblock %}
+{% block moreSelect %}
+{% include 'select.html' %}
+{% endblock %}
+{% block labellist %}
+{% include 'labellist.html' %}
+{% endblock %}
+{% block archivelist %}
+{% include 'archivelist.html' %}
+{% endblock %}
+{% block linklist %}
+{% include 'links.html' %}
+{% endblock %}
+{% block footer %}
+{% include 'footer.html' %}
+{% endblock %}

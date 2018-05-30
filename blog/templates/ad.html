@@ -1,0 +1,31 @@
+{% load staticfiles %}
+<div class="banner">
+      <div id="slide-holder">
+        <div id="slide-runner">
+            {% for ad in adslist %}
+            <a href="{{ ad.callback_url }}" target="_blank"><img id="{{ ad.index }}" src=" {{ MEDIA_URL }}{{ ad.image_url }} " alt="" /></a>
+            {% endfor %}
+          <div id="slide-controls">
+            <p id="slide-client" class="text"><strong></strong><span></span></p>
+            <p id="slide-desc" class="text"></p>
+            <p id="slide-nav"></p>
+          </div>
+        </div>
+      </div>
+      <script>
+    if(!window.slider) {
+    var slider={};
+  }
+
+  slider.data= [
+  {% for ad in adslist %}
+    {
+        "id":"{{ad.index}}", // 与slide-runner中的img标签id对应
+        "client":"{{ ad.title }}",
+        "desc":"{{ ad.description }}" //这里修改描述
+    },
+  {% endfor %}
+  ];
+    </script>
+    </div>
+    <!-- banner代码 结束 -->

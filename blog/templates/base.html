@@ -1,0 +1,92 @@
+{% load staticfiles %}
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{{ SITE_NAME }}</title>
+<meta name="keywords" content="{{ SITE_NAME }}" />
+<meta name="description" content="{{ SITE_DESC }}" />
+<link href="{% static 'css/base.css' %}?v=1.0.13" rel="stylesheet">
+<link href="{% static 'css/index.css' %}" rel="stylesheet">
+<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/sliders.js' %}"></script>
+<!--[if lt IE 9]>
+<script src="{% static 'js/modernizr.js' %}"></script>
+<![endif]-->
+{% block custom_js %}{% endblock %}
+</head>
+<body>
+<header>
+    <div class="header_main">
+        <div class="logo">
+            <h1>{{ SITE_NAME }}</h1>
+            <p>{{ SITE_DESC }}</p>
+        </div>
+        <div class="login_block">
+            {% if not request.user.is_authenticated %}
+            <a href="{% url 'login' %}">登录</a>
+            {% else %}
+                <p>{{ request.user }}  欢迎你 </p> &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="{% url 'logout' %}">注销</a>
+            {% endif %}
+            <a href="{% url 'register' %}">注册</a>
+        </div>
+    </div>
+    <nav id="topnav" class="f_r">
+                <ul>
+               {% for nav in navslist %}
+                   {% if nav.sub == 1 %}
+                   <li><a href="{{ nav.navurl }}" target="_blank">{{ nav.name }}</a>
+                       <ul>
+                       {% for subnav in subnavslist %}
+                           {% if subnav.pid ==  nav %}
+                           <li><a href="{{ subnav.navurl }} | {{ subnav.pid }} | {{ nav.name }}">{{ subnav.name }}</a></li>
+                           {% endif %}
+                       {% endfor %}
+                       </ul>
+                   </li>
+                   {% else %}
+                   <li><a href="{{ nav.navurl }}">{{ nav.name }}</a></li>
+                   {% endif %}
+               {% endfor %}
+               </ul>
+        <script src="{% static 'js/nav.js' %}"></script>
+    </nav>
+</header>
+<article>
+  <div class="l_box f_l">
+    {% block adcontent %}{% endblock %}
+    <div class="topnews">
+    {% block articleslist %}{% endblock %}
+    </div>
+  <div id="pagination">
+    {% block pagination %}{% endblock %}
+   </div>
+  </div>
+  <div class="r_box f_r">
+    <div class="tit01">
+    {% block atentionme %}{% endblock %}
+    </div>
+    <!--tit01 end-->
+    <div class="moreSelect" id="lp_right_select">
+    {% block moreSelect %} {% endblock %}
+    </div>
+    <!--切换卡 moreSelect end -->
+
+    <div class="cloud">
+    {% block labellist %}{% endblock %}
+    </div>
+    <div class="tuwen">
+    {% block archivelist %}{% endblock %}
+    </div>
+    <div class="links">
+    {% block linklist %}{% endblock %}
+    </div>
+  </div>
+  <!--r_box end -->
+</article>
+<footer>
+{% block footer %}{% endblock %}
+</footer>
+</body>
+</html>
